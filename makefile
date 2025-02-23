@@ -13,4 +13,7 @@ protob:
     proto/*.proto
 
 
-.PHONY: test server protob
+evans: 
+	evans --host localhost --port 8193 -r repl
+
+.PHONY: test server protob evans

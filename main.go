@@ -10,6 +10,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
+	"Email/gapi"
 	"Email/pb"
 	"Email/util"
 )
@@ -28,6 +29,7 @@ func main() {
 		Password: config.RedisPassword,
 		DB:       0,
 	})
+	defer rdb.Close()
 
 	server, err := gapi.ServerSetUp(config, rdb)
 	if err != nil {
@@ -42,7 +44,7 @@ func main() {
 
 	reflection.Register(grpcServer)
 
-	listener, err := net.Listen("tcp", "0.0.0.0:9090")
+	listener, err := net.Listen("tcp", config.EmailPort)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to listen")
 		os.Exit(1)

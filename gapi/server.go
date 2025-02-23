@@ -1,4 +1,4 @@
-package api
+package gapi
 
 import (
 	"github.com/go-redis/redis"
