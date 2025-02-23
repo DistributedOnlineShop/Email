@@ -1,0 +1,22 @@
+syntax="proto3";
+
+package pb;
+
+option go_package="Email/pb";
+
+message SignUpRequest {
+    string to = 1;
+}
+
+message SignUpResponse {
+    string message = 1;
+}
+
+message VerifyEmailRequest {
+    string email = 1;
+    string verification_code = 2;
+}
+
+message VerifyEmailResponse {
+    string message = 1;
+}

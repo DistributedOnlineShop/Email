@@ -1,0 +1,25 @@
+syntax="proto3";
+
+package pb;
+
+import "rpc_email.proto";
+import "google/api/annotations.proto";
+
+option go_package="Email/pb";
+
+service Email {
+    rpc SendEmail (SignUpRequest) returns (SignUpResponse) {
+        option(google.api.http) = {
+            post : "/signup"
+            body : "*"
+        };
+    }
+
+    rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {
+        option(google.api.http) = {
+            post : "/verify"
+            body : "*"
+        };
+    }
+}
+
