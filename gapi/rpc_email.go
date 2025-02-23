@@ -2,6 +2,7 @@ package gapi
 
 import (
 	"context"
+	"time"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -48,6 +49,11 @@ func (s *Server) SendEmail(ctx context.Context, req *pb.SignUpRequest) (*pb.Sign
 	err = SendEmail(s.config, data)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "Fail to Send Email")
+	}
+
+	err = s.SetData(req.GetTo(), verificationCode, 5*time.Minute)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Fail to Save to Redis")
 	}
 
 	return &pb.SignUpResponse{Message: "Successfully sent the verification code email"}, nil

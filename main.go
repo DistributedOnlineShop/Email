@@ -26,10 +26,9 @@ func main() {
 
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     config.RedisAddress,
-		Password: config.RedisPassword,
-		DB:       0,
+		Password: "",
+		DB:       1,
 	})
-	defer rdb.Close()
 
 	server, err := gapi.ServerSetUp(config, rdb)
 	if err != nil {
