@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"Email/gapi"
-	"Email/pb"
+	pbs "Email/pb/grpc_server"
 	"Email/util"
 )
 
@@ -39,7 +39,7 @@ func main() {
 	Logger := grpc.UnaryInterceptor(gapi.GrpcLogger)
 	grpcServer := grpc.NewServer(Logger)
 
-	pb.RegisterEmailServer(grpcServer, server)
+	pbs.RegisterEmailServer(grpcServer, server)
 
 	reflection.Register(grpcServer)
 

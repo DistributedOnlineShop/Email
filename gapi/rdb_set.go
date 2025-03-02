@@ -12,3 +12,11 @@ func (s *Server) SetData(key, contect string, expiration time.Duration) error {
 	}
 	return nil
 }
+
+func (s *Server) GetData(key string) (string, error) {
+	cmd := s.redis.Get(key)
+	if err := cmd.Err(); err != nil {
+		return "", fmt.Errorf("Failed to taking data in Redis: %s", err)
+	}
+	return cmd.Val(), nil
+}

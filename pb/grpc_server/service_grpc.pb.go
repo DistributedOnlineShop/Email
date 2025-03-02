@@ -4,7 +4,7 @@
 // - protoc             v5.29.3
 // source: service.proto
 
-package pb
+package grpc_server
 
 import (
 	context "context"

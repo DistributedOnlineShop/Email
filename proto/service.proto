@@ -2,10 +2,27 @@ syntax="proto3";
 
 package pb;
 
-import "rpc_email.proto";
 import "google/api/annotations.proto";
 
-option go_package="Email/pb";
+option go_package="Email/pb/grpc_server";
+
+message SignUpRequest {
+    string email = 1;
+    string situation = 2;
+}
+
+message SignUpResponse {
+    string message = 1;
+}
+
+message VerifyEmailRequest {
+    string email = 1;
+    string verification_code = 2;
+}
+
+message VerifyEmailResponse {
+    string message = 1;
+}
 
 service Email {
     rpc SendEmail (SignUpRequest) returns (SignUpResponse) {
@@ -15,11 +32,10 @@ service Email {
         };
     }
 
-    rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {
+    rpc VerifyEmail (VerifyEmailRequest) returns (VerifyEmailResponse) {
         option(google.api.http) = {
             post : "/verify"
             body : "*"
         };
     }
 }
-
