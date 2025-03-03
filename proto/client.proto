@@ -1,7 +1,0 @@
-syntax="proto3";
-
-package pb;
-
-import "google/api/annotations.proto";
-
-option go_package="Email/pb/grpc_client";

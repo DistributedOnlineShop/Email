@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v5.29.3
-// source: service.proto
+// source: service_email.proto
 
-package grpc_server
+package email
 
 import (
 	context "context"
@@ -27,7 +27,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type EmailClient interface {
-	SendEmail(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*SignUpResponse, error)
+	SendEmail(ctx context.Context, in *SendEmailRequest, opts ...grpc.CallOption) (*SendEmailResponse, error)
 	VerifyEmail(ctx context.Context, in *VerifyEmailRequest, opts ...grpc.CallOption) (*VerifyEmailResponse, error)
 }
 
@@ -39,8 +39,8 @@ func NewEmailClient(cc grpc.ClientConnInterface) EmailClient {
 	return &emailClient{cc}
 }
 
-func (c *emailClient) SendEmail(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*SignUpResponse, error) {
-	out := new(SignUpResponse)
+func (c *emailClient) SendEmail(ctx context.Context, in *SendEmailRequest, opts ...grpc.CallOption) (*SendEmailResponse, error) {
+	out := new(SendEmailResponse)
 	err := c.cc.Invoke(ctx, Email_SendEmail_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ func (c *emailClient) VerifyEmail(ctx context.Context, in *VerifyEmailRequest, o
 // All implementations must embed UnimplementedEmailServer
 // for forward compatibility
 type EmailServer interface {
-	SendEmail(context.Context, *SignUpRequest) (*SignUpResponse, error)
+	SendEmail(context.Context, *SendEmailRequest) (*SendEmailResponse, error)
 	VerifyEmail(context.Context, *VerifyEmailRequest) (*VerifyEmailResponse, error)
 	mustEmbedUnimplementedEmailServer()
 }
@@ -70,7 +70,7 @@ type EmailServer interface {
 type UnimplementedEmailServer struct {
 }
 
-func (UnimplementedEmailServer) SendEmail(context.Context, *SignUpRequest) (*SignUpResponse, error) {
+func (UnimplementedEmailServer) SendEmail(context.Context, *SendEmailRequest) (*SendEmailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendEmail not implemented")
 }
 func (UnimplementedEmailServer) VerifyEmail(context.Context, *VerifyEmailRequest) (*VerifyEmailResponse, error) {
@@ -90,7 +90,7 @@ func RegisterEmailServer(s grpc.ServiceRegistrar, srv EmailServer) {
 }
 
 func _Email_SendEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SignUpRequest)
+	in := new(SendEmailRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ func _Email_SendEmail_Handler(srv interface{}, ctx context.Context, dec func(int
 		FullMethod: Email_SendEmail_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EmailServer).SendEmail(ctx, req.(*SignUpRequest))
+		return srv.(EmailServer).SendEmail(ctx, req.(*SendEmailRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -142,5 +142,5 @@ var Email_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "service.proto",
+	Metadata: "service_email.proto",
 }

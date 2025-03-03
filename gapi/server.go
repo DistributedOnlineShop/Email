@@ -3,12 +3,14 @@ package gapi
 import (
 	"github.com/go-redis/redis"
 
-	pbs "Email/pb/grpc_server"
+	pbe "Email/pb/email"
+	pbv "Email/pb/verification"
 	"Email/util"
 )
 
 type Server struct {
-	pbs.UnimplementedEmailServer
+	pbe.UnimplementedEmailServer
+	pbv.UnimplementedVerificationServer
 	config util.Config
 	redis  *redis.Client
 }

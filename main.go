@@ -11,7 +11,8 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"Email/gapi"
-	pbs "Email/pb/grpc_server"
+	pbe "Email/pb/email"
+	pbv "Email/pb/verification"
 	"Email/util"
 )
 
@@ -39,7 +40,8 @@ func main() {
 	Logger := grpc.UnaryInterceptor(gapi.GrpcLogger)
 	grpcServer := grpc.NewServer(Logger)
 
-	pbs.RegisterEmailServer(grpcServer, server)
+	pbe.RegisterEmailServer(grpcServer, server)
+	pbv.RegisterVerificationServer(grpcServer, server)
 
 	reflection.Register(grpcServer)
 
@@ -50,7 +52,6 @@ func main() {
 	}
 
 	log.Info().Msgf("Connect to grpc server at %s", listener.Addr().String())
-
 	err = grpcServer.Serve(listener)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to connecting serve")

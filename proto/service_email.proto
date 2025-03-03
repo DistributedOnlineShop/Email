@@ -4,14 +4,14 @@ package pb;
 
 import "google/api/annotations.proto";
 
-option go_package="Email/pb/grpc_server";
+option go_package="Email/pb/email";
 
-message SignUpRequest {
+message SendEmailRequest {
     string email = 1;
     string situation = 2;
 }
 
-message SignUpResponse {
+message SendEmailResponse {
     string message = 1;
 }
 
@@ -25,7 +25,7 @@ message VerifyEmailResponse {
 }
 
 service Email {
-    rpc SendEmail (SignUpRequest) returns (SignUpResponse) {
+    rpc SendEmail (SendEmailRequest) returns (SendEmailResponse) {
         option(google.api.http) = {
             post : "/signup"
             body : "*"
