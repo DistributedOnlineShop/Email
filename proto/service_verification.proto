@@ -1,39 +1,32 @@
-syntax="proto3";
+syntax = "proto3";
 
 package pb;
 
 import "google/api/annotations.proto";
 
-option go_package="Email/pb/verification";
+option go_package = "Email/pb/verification";
 
-message CheckEmailRequest {
-    string email = 1;
-}
+message CheckEmailRequest { string email = 1; }
 
-message CheckEmailResponse {
-    bool is_available = 1;
-}
+message CheckEmailResponse { bool is_available = 1; }
 
-message VerifySessionIdRequest {
-    string sessionID = 1;
-}
+message VerifySessionIdRequest { string sessionID = 1; }
 
-message VerifySessionIdResponse {
-    bool is_available = 1;
-}
+message VerifySessionIdResponse { bool is_available = 1; }
 
 service Verification {
-    rpc CheckEmail (CheckEmailRequest) returns (CheckEmailResponse) {
-        option (google.api.http) = {
-            post: "/verify/email"
-            body: "*"
-        };
-    }
+  rpc CheckEmail(CheckEmailRequest) returns (CheckEmailResponse) {
+    option (google.api.http) = {
+      post : "/verify/email"
+      body : "*"
+    };
+  }
 
-    rpc VerifySessionId (VerifySessionIdRequest) returns (VerifySessionIdResponse) {
-        option (google.api.http) = {
-            post: "/verify/session"
-            body: "*"
-        };
-    }
+  rpc VerifySessionId(VerifySessionIdRequest)
+      returns (VerifySessionIdResponse) {
+    option (google.api.http) = {
+      post : "/verify/session"
+      body : "*"
+    };
+  }
 }

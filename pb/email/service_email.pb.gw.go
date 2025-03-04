@@ -138,7 +138,7 @@ func RegisterEmailHandlerServer(ctx context.Context, mux *runtime.ServeMux, serv
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.Email/VerifyEmail", runtime.WithHTTPPathPattern("/verify"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.Email/VerifyEmail", runtime.WithHTTPPathPattern("/verify/email"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -224,7 +224,7 @@ func RegisterEmailHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/pb.Email/VerifyEmail", runtime.WithHTTPPathPattern("/verify"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/pb.Email/VerifyEmail", runtime.WithHTTPPathPattern("/verify/email"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -246,7 +246,7 @@ func RegisterEmailHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 var (
 	pattern_Email_SendEmail_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"signup"}, ""))
 
-	pattern_Email_VerifyEmail_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"verify"}, ""))
+	pattern_Email_VerifyEmail_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"verify", "email"}, ""))
 )
 
 var (

@@ -1,41 +1,37 @@
-syntax="proto3";
+syntax = "proto3";
 
 package pb;
 
 import "google/api/annotations.proto";
 
-option go_package="Email/pb/email";
+option go_package = "Email/pb/email";
 
 message SendEmailRequest {
-    string email = 1;
-    string situation = 2;
+  string email = 1;
+  string situation = 2;
 }
 
-message SendEmailResponse {
-    string message = 1;
-}
+message SendEmailResponse { string message = 1; }
 
 message VerifyEmailRequest {
-    string email = 1;
-    string verification_code = 2;
+  string email = 1;
+  string verification_code = 2;
 }
 
-message VerifyEmailResponse {
-    string message = 1;
-}
+message VerifyEmailResponse { string message = 1; }
 
 service Email {
-    rpc SendEmail (SendEmailRequest) returns (SendEmailResponse) {
-        option(google.api.http) = {
-            post : "/signup"
-            body : "*"
-        };
-    }
+  rpc SendEmail(SendEmailRequest) returns (SendEmailResponse) {
+    option (google.api.http) = {
+      post : "/signup"
+      body : "*"
+    };
+  }
 
-    rpc VerifyEmail (VerifyEmailRequest) returns (VerifyEmailResponse) {
-        option(google.api.http) = {
-            post : "/verify"
-            body : "*"
-        };
-    }
+  rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {
+    option (google.api.http) = {
+      post : "/verify/email"
+      body : "*"
+    };
+  }
 }
