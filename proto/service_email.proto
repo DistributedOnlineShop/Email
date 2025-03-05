@@ -23,7 +23,8 @@ message VerifyEmailRequest {
 
 message VerifyEmailResponse {
   string session_id = 1;
-  string message = 2; 
+  string token = 2;
+  string message = 3; 
 }
 
 service Email {

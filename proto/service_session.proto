@@ -6,8 +6,14 @@ import "google/api/annotations.proto";
 
 option go_package = "Email/pb/verification";
 
-message CreateSessionIdRequest { string email = 1;}
-message CreateSessionIdResponse { string session_Id = 1;}
+message CreateSessionIdRequest { 
+  string email = 1;
+  string status = 2;
+}
+message CreateSessionIdResponse { 
+  string session_Id = 1;
+  string token = 2;
+}
 
 message VerifySessionIdRequest { string session_id = 1; }
 message VerifySessionIdResponse { bool is_available = 1; }

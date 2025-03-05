@@ -13,7 +13,7 @@ message CheckEmailResponse { bool is_available = 1; }
 service Verification {
   rpc CheckEmail(CheckEmailRequest) returns (CheckEmailResponse) {
     option (google.api.http) = {
-      post : "/verify/email"
+      post : "/email/verify"
       body : "*"
     };
   }

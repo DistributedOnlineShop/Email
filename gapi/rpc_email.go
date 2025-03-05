@@ -3,9 +3,7 @@ package gapi
 import (
 	"context"
 
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 
 	pbe "Email/pb/email"
@@ -32,29 +30,22 @@ func (s *Server) VerifyEmail(ctx context.Context, req *pbe.VerifyEmailRequest) (
 	verificationCode, err := s.GetData(req.GetEmail())
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, "Verification code not found")
+	} else {
+		err := s.DeleteData(req.GetEmail())
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "Failed to Delete Verification Code")
+		}
 	}
 
 	if req.GetVerificationCode() == verificationCode {
-		// createSessionidRep, err := s.CreationSessionId(ctx, &pbs.CreateSessionIdRequest{Email: req.GetEmail()})
-		// if err != nil {
-		// 	return nil, err
-		// }
-
-		conn, err := grpc.NewClient(s.config.UsersManagementPort, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		createSessionidRep, err := s.CreationSessionId(ctx, &pbs.CreateSessionIdRequest{Email: req.GetEmail(), Status: "SignUp"})
 		if err != nil {
-			return nil, status.Errorf(codes.Internal, "Failed to connect Email Server")
-		}
-		defer conn.Close()
-
-		client := pbs.NewSessionClient(conn)
-
-		sessionRes, err := client.CreateSessionId(ctx, &pbs.CreateSessionIdRequest{Email: req.GetEmail()})
-		if err != nil {
-			return nil, status.Errorf(codes.Internal, "Error during verification")
+			return nil, err
 		}
 
 		return &pbe.VerifyEmailResponse{
-			SessionId: sessionRes.Session_Id,
+			SessionId: createSessionidRep.Session_Id,
+			Token:     createSessionidRep.Token,
 			Message:   "Successfully created session",
 		}, nil
 	}
