@@ -8,6 +8,7 @@ import (
 
 type Config struct {
 	EmailPort           string        `mapstructure:"EMAIL_PORT"`
+	UsersManagementPort string        `mapstructure:"USERS_MANAGEMENT_PORT"`
 	Environment         string        `mapstructure:"ENVIRONMENT"`
 	AllowHeaders        []string      `mapstructure:"ALLOW_HEADERS"`
 	TokenSymmetricKey   string        `mapstructure:"TOKEN_SYMMETRIC_KEY"`

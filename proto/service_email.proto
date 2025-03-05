@@ -11,14 +11,20 @@ message SendEmailRequest {
   string situation = 2;
 }
 
-message SendEmailResponse { string message = 1; }
+message SendEmailResponse { 
+  string email = 1; 
+  string body = 2;
+}
 
 message VerifyEmailRequest {
   string email = 1;
   string verification_code = 2;
 }
 
-message VerifyEmailResponse { string message = 1; }
+message VerifyEmailResponse {
+  string session_id = 1;
+  string message = 2; 
+}
 
 service Email {
   rpc SendEmail(SendEmailRequest) returns (SendEmailResponse) {
@@ -30,7 +36,7 @@ service Email {
 
   rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {
     option (google.api.http) = {
-      post : "/verify/email"
+      post : "/email/verify"
       body : "*"
     };
   }

@@ -12,6 +12,7 @@ import (
 
 	"Email/gapi"
 	pbe "Email/pb/email"
+	pbs "Email/pb/session"
 	pbv "Email/pb/verification"
 	"Email/util"
 )
@@ -41,6 +42,7 @@ func main() {
 	grpcServer := grpc.NewServer(Logger)
 
 	pbe.RegisterEmailServer(grpcServer, server)
+	pbs.RegisterSessionServer(grpcServer, server)
 	pbv.RegisterVerificationServer(grpcServer, server)
 
 	reflection.Register(grpcServer)

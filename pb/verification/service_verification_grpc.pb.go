@@ -19,8 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Verification_CheckEmail_FullMethodName      = "/pb.Verification/CheckEmail"
-	Verification_VerifySessionId_FullMethodName = "/pb.Verification/VerifySessionId"
+	Verification_CheckEmail_FullMethodName = "/pb.Verification/CheckEmail"
 )
 
 // VerificationClient is the client API for Verification service.
@@ -28,7 +27,6 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type VerificationClient interface {
 	CheckEmail(ctx context.Context, in *CheckEmailRequest, opts ...grpc.CallOption) (*CheckEmailResponse, error)
-	VerifySessionId(ctx context.Context, in *VerifySessionIdRequest, opts ...grpc.CallOption) (*VerifySessionIdResponse, error)
 }
 
 type verificationClient struct {
@@ -48,21 +46,11 @@ func (c *verificationClient) CheckEmail(ctx context.Context, in *CheckEmailReque
 	return out, nil
 }
 
-func (c *verificationClient) VerifySessionId(ctx context.Context, in *VerifySessionIdRequest, opts ...grpc.CallOption) (*VerifySessionIdResponse, error) {
-	out := new(VerifySessionIdResponse)
-	err := c.cc.Invoke(ctx, Verification_VerifySessionId_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // VerificationServer is the server API for Verification service.
 // All implementations must embed UnimplementedVerificationServer
 // for forward compatibility
 type VerificationServer interface {
 	CheckEmail(context.Context, *CheckEmailRequest) (*CheckEmailResponse, error)
-	VerifySessionId(context.Context, *VerifySessionIdRequest) (*VerifySessionIdResponse, error)
 	mustEmbedUnimplementedVerificationServer()
 }
 
@@ -72,9 +60,6 @@ type UnimplementedVerificationServer struct {
 
 func (UnimplementedVerificationServer) CheckEmail(context.Context, *CheckEmailRequest) (*CheckEmailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckEmail not implemented")
-}
-func (UnimplementedVerificationServer) VerifySessionId(context.Context, *VerifySessionIdRequest) (*VerifySessionIdResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method VerifySessionId not implemented")
 }
 func (UnimplementedVerificationServer) mustEmbedUnimplementedVerificationServer() {}
 
@@ -107,24 +92,6 @@ func _Verification_CheckEmail_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Verification_VerifySessionId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(VerifySessionIdRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(VerificationServer).VerifySessionId(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Verification_VerifySessionId_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VerificationServer).VerifySessionId(ctx, req.(*VerifySessionIdRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Verification_ServiceDesc is the grpc.ServiceDesc for Verification service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -135,10 +102,6 @@ var Verification_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CheckEmail",
 			Handler:    _Verification_CheckEmail_Handler,
-		},
-		{
-			MethodName: "VerifySessionId",
-			Handler:    _Verification_VerifySessionId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

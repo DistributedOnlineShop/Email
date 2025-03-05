@@ -4,6 +4,7 @@ import (
 	"github.com/go-redis/redis"
 
 	pbe "Email/pb/email"
+	pbs "Email/pb/session"
 	pbv "Email/pb/verification"
 	"Email/util"
 )
@@ -11,6 +12,8 @@ import (
 type Server struct {
 	pbe.UnimplementedEmailServer
 	pbv.UnimplementedVerificationServer
+	pbs.UnimplementedSessionServer
+
 	config util.Config
 	redis  *redis.Client
 }

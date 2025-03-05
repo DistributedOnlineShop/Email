@@ -7,6 +7,7 @@ server:
 protob:
 	rm -f pb/email/*.go
 	rm -f pb/verification/*.go
+	rm -f pb/session/*.go
 
 	protoc --proto_path=proto --go_out=pb/email --go_opt=paths=source_relative \
 	--go-grpc_out=pb/email --go-grpc_opt=paths=source_relative \
@@ -17,6 +18,11 @@ protob:
 	--go-grpc_out=pb/verification --go-grpc_opt=paths=source_relative \
 	--grpc-gateway_out=pb/verification --grpc-gateway_opt paths=source_relative \
     proto/service_verification.proto
+
+	protoc --proto_path=proto --go_out=pb/session --go_opt=paths=source_relative \
+	--go-grpc_out=pb/session --go-grpc_opt=paths=source_relative \
+	--grpc-gateway_out=pb/session --grpc-gateway_opt paths=source_relative \
+    proto/service_session.proto
 
 evans: 
 	evans --host localhost --port 8193 -r repl

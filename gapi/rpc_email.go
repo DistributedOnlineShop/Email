@@ -3,10 +3,13 @@ package gapi
 import (
 	"context"
 
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 
 	pbe "Email/pb/email"
+	pbs "Email/pb/session"
 )
 
 func (s *Server) SendEmail(ctx context.Context, req *pbe.SendEmailRequest) (*pbe.SendEmailResponse, error) {
@@ -19,7 +22,10 @@ func (s *Server) SendEmail(ctx context.Context, req *pbe.SendEmailRequest) (*pbe
 		return nil, status.Errorf(codes.Internal, "Fail to Send Email")
 	}
 
-	return &pbe.SendEmailResponse{Message: "Successfully sent the verification code email"}, nil
+	return &pbe.SendEmailResponse{
+		Email: req.GetEmail(),
+		Body:  data.Body,
+	}, nil
 }
 
 func (s *Server) VerifyEmail(ctx context.Context, req *pbe.VerifyEmailRequest) (*pbe.VerifyEmailResponse, error) {
@@ -29,8 +35,29 @@ func (s *Server) VerifyEmail(ctx context.Context, req *pbe.VerifyEmailRequest) (
 	}
 
 	if req.GetVerificationCode() == verificationCode {
-		return &pbe.VerifyEmailResponse{Message: "Verification code correct"}, nil
+		// createSessionidRep, err := s.CreationSessionId(ctx, &pbs.CreateSessionIdRequest{Email: req.GetEmail()})
+		// if err != nil {
+		// 	return nil, err
+		// }
+
+		conn, err := grpc.NewClient(s.config.UsersManagementPort, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "Failed to connect Email Server")
+		}
+		defer conn.Close()
+
+		client := pbs.NewSessionClient(conn)
+
+		sessionRes, err := client.CreateSessionId(ctx, &pbs.CreateSessionIdRequest{Email: req.GetEmail()})
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "Error during verification")
+		}
+
+		return &pbe.VerifyEmailResponse{
+			SessionId: sessionRes.Session_Id,
+			Message:   "Successfully created session",
+		}, nil
 	}
 
-	return nil, status.Errorf(codes.Unauthenticated, "Verification code incorrect")
+	return nil, status.Errorf(codes.Unauthenticated, "Verification code is incorrect")
 }
