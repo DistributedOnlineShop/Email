@@ -44,9 +44,8 @@ func (s *Server) VerifyEmail(ctx context.Context, req *pbe.VerifyEmailRequest) (
 		}
 
 		return &pbe.VerifyEmailResponse{
-			SessionId: createSessionidRep.Session_Id,
-			Token:     createSessionidRep.Token,
-			Message:   "Successfully created session",
+			Token:   createSessionidRep.Token,
+			Message: "Successfully created session",
 		}, nil
 	}
 

@@ -20,7 +20,6 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	Session_CreateSessionId_FullMethodName = "/pb.Session/CreateSessionId"
-	Session_VerifySessionId_FullMethodName = "/pb.Session/VerifySessionId"
 )
 
 // SessionClient is the client API for Session service.
@@ -28,7 +27,6 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SessionClient interface {
 	CreateSessionId(ctx context.Context, in *CreateSessionIdRequest, opts ...grpc.CallOption) (*CreateSessionIdResponse, error)
-	VerifySessionId(ctx context.Context, in *VerifySessionIdRequest, opts ...grpc.CallOption) (*VerifySessionIdResponse, error)
 }
 
 type sessionClient struct {
@@ -48,21 +46,11 @@ func (c *sessionClient) CreateSessionId(ctx context.Context, in *CreateSessionId
 	return out, nil
 }
 
-func (c *sessionClient) VerifySessionId(ctx context.Context, in *VerifySessionIdRequest, opts ...grpc.CallOption) (*VerifySessionIdResponse, error) {
-	out := new(VerifySessionIdResponse)
-	err := c.cc.Invoke(ctx, Session_VerifySessionId_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // SessionServer is the server API for Session service.
 // All implementations must embed UnimplementedSessionServer
 // for forward compatibility
 type SessionServer interface {
 	CreateSessionId(context.Context, *CreateSessionIdRequest) (*CreateSessionIdResponse, error)
-	VerifySessionId(context.Context, *VerifySessionIdRequest) (*VerifySessionIdResponse, error)
 	mustEmbedUnimplementedSessionServer()
 }
 
@@ -72,9 +60,6 @@ type UnimplementedSessionServer struct {
 
 func (UnimplementedSessionServer) CreateSessionId(context.Context, *CreateSessionIdRequest) (*CreateSessionIdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSessionId not implemented")
-}
-func (UnimplementedSessionServer) VerifySessionId(context.Context, *VerifySessionIdRequest) (*VerifySessionIdResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method VerifySessionId not implemented")
 }
 func (UnimplementedSessionServer) mustEmbedUnimplementedSessionServer() {}
 
@@ -107,24 +92,6 @@ func _Session_CreateSessionId_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Session_VerifySessionId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(VerifySessionIdRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SessionServer).VerifySessionId(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Session_VerifySessionId_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SessionServer).VerifySessionId(ctx, req.(*VerifySessionIdRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Session_ServiceDesc is the grpc.ServiceDesc for Session service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -135,10 +102,6 @@ var Session_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateSessionId",
 			Handler:    _Session_CreateSessionId_Handler,
-		},
-		{
-			MethodName: "VerifySessionId",
-			Handler:    _Session_VerifySessionId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
