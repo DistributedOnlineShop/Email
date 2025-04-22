@@ -1,11 +1,13 @@
 package gapi
 
 import (
+	"context"
 	"time"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	pbu "Email/pb/users"
 	"Email/util"
 )
 
@@ -51,12 +53,17 @@ func (s *Server) EmailContextTpye(number, email string) (EmailContext, error) {
 		}, nil
 
 	case "after_login_reset_password":
-		// TODO:UserName and reset_password url
+		// TODO reset password url setting
+		user, err := s.UserInformations(context.Background(), &pbu.UserInformationRequest{Email: email})
+		if err != nil {
+			return EmailContext{}, status.Error(codes.Internal, "Failed to get user information")
+		}
+
 		body := `
 		<html>
 		<body>
 			<div>
-				<p>親愛的 ` + `，</p> 
+				<p>親愛的 ` + user.FristName + user.LastName + `，</p> 
 				<p>您好！</p>
 				<p>我們收到您重設帳戶密碼的請求。請點擊下方連結以設定新的密碼：</p>
 				<a href="http://localhost:8080" style="font-size: 18px; font-weight: bold; padding: 10px 20px; border-radius: 5px;">
@@ -76,6 +83,9 @@ func (s *Server) EmailContextTpye(number, email string) (EmailContext, error) {
 			Body:    body,
 			Email:   []string{email},
 		}, nil
+
+	case "reset Done":
+
 	}
 
 	return EmailContext{}, nil
